@@ -1,10 +1,15 @@
-import React from "react"
-import { screen } from "@testing-library/react"
-import { render } from "./test-utils"
-import { App } from "./App"
+import { screen, waitFor } from "@testing-library/react";
+import { act } from "react-dom/test-utils";
+import { App } from "./App";
+import { render } from "./test-utils";
 
-test("renders learn react link", () => {
-  render(<App />)
-  const linkElement = screen.getByText(/learn chakra/i)
-  expect(linkElement).toBeInTheDocument()
-})
+test("increments counter", async () => {
+  render(<App />);
+  const counterLabel = screen.getByLabelText("Counter");
+  expect(counterLabel).toHaveTextContent("0");
+
+  act(() => {
+    screen.getByRole("button", { name: "Increment" }).click();
+  });
+  await waitFor(() => expect(counterLabel).toHaveTextContent("1"));
+});
